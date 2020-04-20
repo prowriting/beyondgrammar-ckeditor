@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CKEditor</title>
+
+    <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+</head>
+<body>
+
+<div id="editor">
+    <p>
+        Novalk Djokovic is set to miss the US Open after one of his doctors made an announcement that he will need six to
+        twelve weeks to recovers from a elbow injury.
+    </p>
+
+    <p>
+        But Andy Murrey's chances of playing at Flushing Meadows would appear more positive, with the Scot continuing
+        his rehabilitation from a hip problem.
+    </p>
+
+    <p>
+        The last grandslam of the year starts in just under five weeks on August 28, meaning Djokovic will run out of
+        time if the latest assessment is correct.
+    </p>
+
+    <p>
+        <b>Injured Djokovic starting to consider a break away from tennis</b>
+        <br />The 12-time major champion was forced to retire injured during his Wimbeldon quarter-final against Tomas
+        Berdych earlier this month and said after the match that he had been feeling pain in his right elbow for over a
+        year and a half. According to
+        his physio its not doing very well. If he does return he will be more likely to injure it again.
+    </p>
+
+    <p>
+        He has since been seeking advice from specialists, including Serbian doctor Zdenko Milinkovic, who said
+        Djokovic is suffering from a "bruised bone due to excessive playing".
+    </p>
+
+    <p>"Nole must rest for six to 12 weeks," Milinkovic told Sportski Zurnal, a sports newspaper in Serbia.</p>
+
+    <p>
+        The next examination will know wether this asdsessment stays or changes. During this period, he is not going to
+        train with a racket but he will run other sessions, such as fitness and the like.
+    </p>
+</div>
+
+<script src="beyond-grammar-plugin.js"></script>
+<script>
+
+    CKEDITOR.plugins.add("beyondgrammar", BeyondGrammarCKEditor.createBeyondGrammarPlugin({
+        service : {
+            userId : 'BeyondGrammar',
+            apiKey: 'E8FEF7AE-3F36-4EAF-A451-456D05E6F2A3',
+            sourcePath : "http://localhost:8080/bundle.js"
+        },
+
+        grammar : { }
+    }));
+    
+    window.editor = CKEDITOR.replace( 'editor', {
+        extraPlugins :[
+            'beyondgrammar'
+        ]
+    });
+</script>
+
+</body>
+</html>
