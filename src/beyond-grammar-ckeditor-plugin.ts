@@ -9,10 +9,9 @@ import {
 } from "./interfaces/interfaces";
 
 export const DEFAULT_SERVICE_CONFIG : ICKEditorServiceSettings = {
-    sourcePath : '//cdn.prowritingaid.com/beyondgrammar/2.0.2893/dist/hayt/bundle.js',
+    sourcePath : '//cdn.prowritingaid.com/beyondgrammar/2.0.5252/dist/hayt/bundle.js',
     serviceUrl : '//rtg.prowritingaid.com'
 }
-
 export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
     options = prepareOptions( options );
     
@@ -38,10 +37,12 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
     let isSourceLoaded : boolean = false;
     // loading beyond grammar core
     let onLoad = loadScript( options.service.sourcePath ).then(()=>{
-        let namespace = window['BeyondGrammar'] as { GrammarChecker : IGrammarCheckerConstructor, HighlightOverlayWrapper : IHighlightOverlayWrapperConstructor };
+        let namespace = window['BeyondGrammar'] as { 
+            GrammarChecker : IGrammarCheckerConstructor, 
+            HighlightOverlayWrapper : IHighlightOverlayWrapperConstructor 
+        };
 
         if( namespace ) {
-
             GrammarChecker = namespace.GrammarChecker;
             HighlightOverlayWrapper = namespace.HighlightOverlayWrapper;
         }
@@ -59,33 +60,33 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
     }
     
     function onReadyInstance( editor : CKEDITOR.editor ) {
-        console.log('onReadyInstance')
-        // tryLinkToEditor();
+        //nothing for awhile
     }
+    
     
     function onModeChanged( editor : CKEDITOR.editor) {
-        console.log("onModeChanged");
         tryLinkToEditor(editor);
     }
-    
+
     let plugin : IGrammarChecker;
+    let wrapper : any;
     
-    function tryLinkToEditor(editor : CKEDITOR.editor) {
+    function unlinkPlugin() {
         if( plugin ) {
             try{
-                plugin.clearMarks();
+                wrapper.clearMarks();
                 plugin.deactivate();
-            }catch (e) {
-                console.error(e);
-            }
+            }catch (e) {}
             plugin = null;
         }
-        
+    }
+    
+    function tryLinkToEditor(editor : CKEDITOR.editor) {
         let editable = editor._?.editable?.$;
         if( editable && editor.mode == "wysiwyg" ){
+            wrapper = new HighlightOverlayWrapper(editable)
             plugin = new GrammarChecker( 
-                editable, options.service, options.grammar,
-                new HighlightOverlayWrapper(editable)
+                editable, options.service, options.grammar, wrapper
             );
             plugin
                 .init()
@@ -115,10 +116,15 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
 
             editor.on('mode', (evt)=>{
                 if( isSourceLoaded ) {
-                    console.log(evt);
                     onModeChanged( editor );
                 } else {
                     callModeChangedWhenInstanceIsReady = true;
+                }
+            });
+            
+            editor.on("beforeSetMode", ()=>{
+                if( isSourceLoaded ) {
+                    unlinkPlugin();
                 }
             });
         }
