@@ -6,8 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --port 8082 --config ./conf/webpack-demo.conf.js --content-base build/",
     "startLocal:": "webpack-dev-server --port 8082 --config ./conf/webpack-demo.conf.js --content-base build/",
-    "build": "./node_modules/.bin/webpack --config ./conf/webpack-demo.conf.js ",
-    "build:CI": "./node_modules/.bin/webpack --config ./conf/webpack-demo.CI.conf.js "
+    "build": "./node_modules/.bin/webpack --config conf/webpack.dist.js ",
+    "build:CI": "./node_modules/.bin/webpack --config conf/webpack.dist.js "
   },
   "author": "",
   "license": "ISC",
