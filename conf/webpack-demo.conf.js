@@ -11,7 +11,6 @@ const ROOT = path.resolve('.');
 module.exports = {
     watch : true,
     stats: { colors: true, reasons: true },
-    debug: true,
 
     output: {
         path : path.resolve('dist'),
@@ -20,7 +19,7 @@ module.exports = {
     },
 
     entry: {
-        'beyond-grammar-plugin' : "expose?BeyondGrammarCKEditor!./src/beyond-grammar-ckeditor-plugin.ts",
+        'beyond-grammar-plugin' : "expose-loader?BeyondGrammarCKEditor!./src/beyond-grammar-ckeditor-plugin.ts",
          //"i18n-en" : "expose?GrammarChecker_lang_en!./src/i18n/en.ts"
     },
 
@@ -32,7 +31,7 @@ module.exports = {
     ],
 
     resolve: {
-        extensions: [ '', '.ts', '.es6', '.js', '.json' ],
+        extensions: [ '.ts', '.es6', '.js', '.json' ],
         modules: [
             path.join(ROOT, "modules"),
             path.join(ROOT, 'node_modules'),
@@ -40,15 +39,14 @@ module.exports = {
         ]
     },
     module: {
-        loaders: [
-            {test: /\.ts$/, loader: 'ts-loader?project=./tsconfig.json'},
+        rules: [
+            {test: /\.ts$/, loader: 'ts-loader'},
             {test : /\.png$/, loader : "url-loader"}
         ]
     },
 
     devServer: {
         contentBase: './',
-        quite: false,
         proxy: {
             "/api/v1": {
                 target: "http://rtgrammarapi.azurewebsites.net/",
