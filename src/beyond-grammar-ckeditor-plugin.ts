@@ -84,8 +84,6 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
     function tryLinkToEditor(editor : CKEDITOR.editor) {
         let editable = editor._?.editable?.$;
         if( editable && editor.mode == "wysiwyg" ){
-            editor._.editable.setAttribute("pwa-fake-editor", '');
-            editor._.editable.setAttribute("data-gramm", 'false');
             wrapper = new HighlightOverlayWrapper(editable)
             plugin = new GrammarChecker( 
                 editable, options.service, options.grammar, wrapper
@@ -98,12 +96,21 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
         }
     }
     
+    function patchEditorForAvoidingExtensionLinking( editor : CKEDITOR.editor ){
+        if( editor._?.editable?.$ ) {
+            editor._.editable.setAttribute("pwa-fake-editor", '');
+            editor._.editable.setAttribute("data-gramm", 'false');
+        }
+    }
+    
     let callModeChangedWhenInstanceIsReady : boolean = false;
     return {
         init( editor: CKEDITOR.editor ){
+            patchEditorForAvoidingExtensionLinking(editor);
             initPlugin(editor);
             
             editor.once("instanceReady", ()=>{
+                patchEditorForAvoidingExtensionLinking(editor);
                 if( isSourceLoaded ) {
                     onReadyInstance( editor );
                 } else {
@@ -117,6 +124,7 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
             });
 
             editor.on('mode', (evt)=>{
+                patchEditorForAvoidingExtensionLinking(editor);
                 if( isSourceLoaded ) {
                     onModeChanged( editor );
                 } else {
@@ -125,6 +133,7 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
             });
             
             editor.on("beforeSetMode", ()=>{
+                patchEditorForAvoidingExtensionLinking(editor);
                 if( isSourceLoaded ) {
                     unlinkPlugin();
                 }
