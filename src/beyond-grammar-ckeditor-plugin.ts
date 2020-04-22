@@ -84,6 +84,8 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
     function tryLinkToEditor(editor : CKEDITOR.editor) {
         let editable = editor._?.editable?.$;
         if( editable && editor.mode == "wysiwyg" ){
+            editor._.editable.setAttribute("pwa-fake-editor", '');
+            editor._.editable.setAttribute("data-gramm", 'false');
             wrapper = new HighlightOverlayWrapper(editable)
             plugin = new GrammarChecker( 
                 editable, options.service, options.grammar, wrapper
