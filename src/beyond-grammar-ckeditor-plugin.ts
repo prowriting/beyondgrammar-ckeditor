@@ -26,8 +26,8 @@ export function createBeyondGrammarPlugin( options : CKEditorBGOptions ){
                 ...bgOptions.service
             },
             grammar : {
-                heavyGrammar : true,
-                ...bgOptions.grammar
+                ...bgOptions.grammar,
+                heavyGrammar : true
             }
         };
     }
